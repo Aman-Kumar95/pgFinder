@@ -1199,6 +1199,24 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
     padding: 40px 4% 30px 4%;
   }
 
+  /* Scale down all section headers & description fonts globally on mobile */
+  .colleges-slider-container h2,
+  .dashboard h2,
+  .features h2,
+  .reviews h2,
+  .faq-info h2 {
+    font-size: 22px !important;
+    line-height: 1.35 !important;
+    margin-bottom: 24px !important;
+    letter-spacing: -0.3px !important;
+  }
+  .slider-sub-tagline {
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+    margin-top: 12px !important;
+    padding: 0 10px !important;
+  }
+
 }
 
 /* SMALL MOBILE FIX — Galaxy S8 etc. */
