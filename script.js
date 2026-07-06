@@ -210,6 +210,65 @@ function initCardTilt() {
   });
 }
 
+/* ---------------- FEATURES DECK ANIMATION (Intersection Observer) ---------------- */
+function initFeaturesDeckAnimation() {
+  var deck = document.getElementById('featuresDeck');
+  if (!deck) return;
+
+  var cards = Array.from(deck.querySelectorAll('.feature-card'));
+  if (!cards.length) return;
+
+  var PEEK = 32; // px strip visible per card when stacked
+
+  // Set deck height and card stacked positions immediately
+  function setupStacked() {
+    var cardH = cards[0].offsetHeight || 130;
+    // Deck height = one card + peek strips of remaining cards
+    deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
+    // Stack all cards with peek strips
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
+    }
+  }
+
+  // Spread cards to fill full deck height
+  function triggerSpread() {
+    var cardH = cards[0].offsetHeight || 130;
+    var GAP   = cardH + 16; // gap between spread cards
+    var totalH = cardH + (cards.length - 1) * GAP;
+
+    // Update deck height to fit all spread cards
+    deck.style.height = totalH + 'px';
+
+    // Add spread class to enable CSS transitions, then set positions
+    deck.classList.add('spread');
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].style.transform = 'translateY(' + (i * GAP) + 'px)';
+    }
+  }
+
+  // Run setup after fonts/layout settled
+  window.addEventListener('load', setupStacked);
+  requestAnimationFrame(function() { requestAnimationFrame(setupStacked); });
+
+  // Trigger spread when deck enters viewport
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          // Small delay so user sees the stacked state first
+          setTimeout(triggerSpread, 200);
+          observer.unobserve(deck);
+        }
+      });
+    }, { threshold: 0.25 });
+    observer.observe(deck);
+  } else {
+    // Fallback: spread immediately
+    setTimeout(triggerSpread, 300);
+  }
+}
+
 /* ---------------- HOME LISTINGS AUTO SCROLL ---------------- */
 function initListingsAutoScroll() {
   const container = document.getElementById('listingsContainer');
@@ -298,51 +357,6 @@ function initCustomDropdowns() {
   });
 }
 
-/* ---------------- FEATURES DECK SCROLL ANIMATION ---------------- */
-function initFeaturesDeckAnimation() {
-  var track = document.getElementById('featuresTrack');
-  var deck  = document.getElementById('featuresDeck');
-  if (!track || !deck) return;
-
-  var cards = Array.from(deck.querySelectorAll('.feature-card'));
-  var count = cards.length;
-  var PEEK  = 34; // px — strip visible per card when fully stacked
-
-  function doRender(progress) {
-    // Use deck.offsetHeight as the total available height for spreading
-    var deckH    = deck.offsetHeight;
-    var cardH    = cards[0] ? cards[0].offsetHeight : 130;
-    // spreadGap fills deck exactly: card[count-1] bottom === deckH
-    var spreadGap = count > 1 ? (deckH - cardH) / (count - 1) : 0;
-
-    for (var i = 0; i < cards.length; i++) {
-      var fromY = i * PEEK;
-      var toY   = i * spreadGap;
-      var y     = fromY + (toY - fromY) * progress;
-      cards[i].style.transform = 'translateY(' + y + 'px)';
-    }
-  }
-
-  function onScroll() {
-    var scrolled = -track.getBoundingClientRect().top;
-    var range    = track.offsetHeight - window.innerHeight;
-    var progress = range > 0 ? Math.max(0, Math.min(1, scrolled / range)) : 0;
-    doRender(progress);
-  }
-
-  // Set initial stacked state
-  for (var j = 0; j < cards.length; j++) {
-    cards[j].style.transition = 'none';
-    cards[j].style.transform  = 'translateY(' + (j * PEEK) + 'px)';
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', function() { setTimeout(onScroll, 50); }, { passive: true });
-
-  // Run after layout is fully painted so deck.offsetHeight is correct
-  window.addEventListener('load', onScroll);
-  requestAnimationFrame(function() { requestAnimationFrame(onScroll); });
-}
 
 /* ---------------- INIT ---------------- */
 document.addEventListener('DOMContentLoaded', function() {

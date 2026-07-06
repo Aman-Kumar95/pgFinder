@@ -602,7 +602,12 @@ nav a:hover, nav .active-link {
 /* OTHER MODULES */
 .features {
   background-color: #111217;
-  padding: 0;
+  padding: 80px 8% 60px;
+}
+
+.features h2 {
+  text-align: center;
+  margin-bottom: 48px;
 }
 
 .reviews {
@@ -610,64 +615,42 @@ nav a:hover, nav .active-link {
   background-color: #111217;
 }
 
-/* SCROLL TRACK - gives scroll distance for animation */
-.features-scroll-track {
-  height: 200vh;
-  background-color: #111217;
-  position: relative;
-}
-
-/* STICKY CONTAINER - stays fixed while track scrolls */
-.features-sticky-wrapper {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 0;
-  padding: 60px 8% 50px;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-.features-sticky-wrapper h2 {
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 36px;
-  letter-spacing: -0.5px;
-  text-align: center;
-  width: 100%;
-}
-
-/* DECK CONTAINER - fills remaining height after title */
+/* DECK CONTAINER */
 .features-deck {
   position: relative;
   width: 100%;
   max-width: 850px;
   margin: 0 auto;
-  overflow: hidden;
-  /* height fills the 1fr grid row automatically */
+  /* height is set by JS after measuring cards */
 }
 
-/* INDIVIDUAL CARDS */
+/* INDIVIDUAL CARDS - absolutely stacked at top */
 .feature-card {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  min-height: 180px;
-  border-radius: 24px;
-  padding: 36px 44px;
+  border-radius: 20px;
+  padding: 32px 40px;
   border: 1px solid rgba(255,255,255,0.06);
   will-change: transform;
-  transition: none;
   overflow: hidden;
 }
 
-.feature-card:nth-child(1) { background: #1a1d28; z-index: 4; border-color: rgba(255,204,0,0.15); }
-.feature-card:nth-child(2) { background: #22273a; z-index: 3; border-color: rgba(255,204,0,0.10); }
-.feature-card:nth-child(3) { background: #2a3050; z-index: 2; border-color: rgba(255,204,0,0.07); }
-.feature-card:nth-child(4) { background: #313868; z-index: 1; border-color: rgba(255,204,0,0.04); }
+/* Staggered dark backgrounds */
+.feature-card:nth-child(1) { background: #1a1d28; z-index: 4; border-color: rgba(255,204,0,0.18); }
+.feature-card:nth-child(2) { background: #20243a; z-index: 3; border-color: rgba(255,204,0,0.12); }
+.feature-card:nth-child(3) { background: #272c4a; z-index: 2; border-color: rgba(255,204,0,0.08); }
+.feature-card:nth-child(4) { background: #2e335a; z-index: 1; border-color: rgba(255,204,0,0.04); }
+
+/* Smooth spread transition triggered by JS adding .spread class */
+.features-deck.spread .feature-card {
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.features-deck.spread .feature-card:nth-child(1) { transition-delay: 0s; }
+.features-deck.spread .feature-card:nth-child(2) { transition-delay: 0.08s; }
+.features-deck.spread .feature-card:nth-child(3) { transition-delay: 0.16s; }
+.features-deck.spread .feature-card:nth-child(4) { transition-delay: 0.24s; }
 
 .feature-label {
   display: block;
@@ -675,7 +658,7 @@ nav a:hover, nav .active-link {
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #ffcc00;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   opacity: 0.8;
 }
 
@@ -683,7 +666,7 @@ nav a:hover, nav .active-link {
   font-size: 22px;
   font-weight: 800;
   color: #fff;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .feature-card p {
@@ -1116,17 +1099,13 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
     grid-template-columns: 1fr;
   }
 
-  .features-scroll-track {
-    height: 180vh;
+  .features {
+    padding: 60px 5% 40px;
   }
 
-  .features-sticky-wrapper {
-    padding: 40px 5%;
-  }
-
-  .features-sticky-wrapper h2 {
+  .features h2 {
     font-size: 22px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
   }
 
   .features-deck {
@@ -1134,9 +1113,8 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
   }
 
   .feature-card {
-    padding: 22px 20px;
-    border-radius: 16px;
-    min-height: 140px;
+    padding: 20px 18px;
+    border-radius: 14px;
   }
 
   .feature-card h3 {
