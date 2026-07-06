@@ -338,6 +338,59 @@ function initCustomDropdowns() {
   });
 }
 
+/* ---------------- FEATURES DECK SCROLL ANIMATION ---------------- */
+function initFeaturesDeckAnimation() {
+  const track = document.getElementById('featuresTrack');
+  const deck = document.getElementById('featuresDeck');
+  if (!track || !deck) return;
+
+  const cards = Array.from(deck.querySelectorAll('.feature-card'));
+  const count = cards.length;
+  const CARD_HEIGHT = 180;        // px — visible height of one card
+  const PEEK = 28;                // px — how much of each card peeks when stacked
+  const SPREAD_GAP = 220;         // px — final gap between cards when spread
+
+  // Set initial stacked positions (all cards piled, only peek showing)
+  function setStacked() {
+    cards.forEach((card, i) => {
+      const stackedY = i * PEEK;
+      card.style.transform = `translateY(${stackedY}px)`;
+      card.style.transition = 'none';
+    });
+    // Deck height = one card + peeks of others
+    deck.style.height = (CARD_HEIGHT + (count - 1) * PEEK) + 'px';
+  }
+
+  // Animate based on scroll progress (0 = fully stacked, 1 = fully spread)
+  function animate() {
+    const trackRect = track.getBoundingClientRect();
+    const trackH = track.offsetHeight;
+    const viewH = window.innerHeight;
+
+    // progress: 0 when track top hits viewport top, 1 when track bottom hits viewport bottom
+    const scrolled = -trackRect.top;
+    const scrollRange = trackH - viewH;
+    let progress = Math.max(0, Math.min(1, scrolled / scrollRange));
+
+    cards.forEach((card, i) => {
+      const stackedY = i * PEEK;
+      const spreadY = i * SPREAD_GAP;
+      const currentY = stackedY + (spreadY - stackedY) * progress;
+      card.style.transform = `translateY(${currentY}px)`;
+    });
+
+    // Update deck height so it doesn't clip
+    const spreadTotalH = CARD_HEIGHT + (count - 1) * SPREAD_GAP;
+    const stackedTotalH = CARD_HEIGHT + (count - 1) * PEEK;
+    const currentH = stackedTotalH + (spreadTotalH - stackedTotalH) * progress;
+    deck.style.height = currentH + 'px';
+  }
+
+  setStacked();
+  window.addEventListener('scroll', animate, { passive: true });
+  animate(); // run once on load
+}
+
 /* ---------------- INIT ---------------- */
 document.addEventListener('DOMContentLoaded', () => {
   initCustomDropdowns();
@@ -346,5 +399,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbarScrollEffect();
   initCounters();
   initCardTilt();
-  // Disabled auto-scroll to fix scroll-snap conflict and prevent freezing/flickering
+  initFeaturesDeckAnimation();
+  // Auto-scroll disabled — conflicts with scroll-snap
 });
