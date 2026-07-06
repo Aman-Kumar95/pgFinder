@@ -341,54 +341,56 @@ function initCustomDropdowns() {
 /* ---------------- FEATURES DECK SCROLL ANIMATION ---------------- */
 function initFeaturesDeckAnimation() {
   const track = document.getElementById('featuresTrack');
-  const deck = document.getElementById('featuresDeck');
+  const deck  = document.getElementById('featuresDeck');
   if (!track || !deck) return;
 
   const cards = Array.from(deck.querySelectorAll('.feature-card'));
   const count = cards.length;
-  const CARD_HEIGHT = 180;        // px — visible height of one card
-  const PEEK = 28;                // px — how much of each card peeks when stacked
-  const SPREAD_GAP = 220;         // px — final gap between cards when spread
+  const PEEK  = 26; // px each card peeks when fully stacked
 
-  // Set initial stacked positions (all cards piled, only peek showing)
-  function setStacked() {
-    cards.forEach((card, i) => {
-      const stackedY = i * PEEK;
-      card.style.transform = `translateY(${stackedY}px)`;
-      card.style.transition = 'none';
-    });
-    // Deck height = one card + peeks of others
-    deck.style.height = (CARD_HEIGHT + (count - 1) * PEEK) + 'px';
+  /* Compute spread gap so ALL cards fit inside the sticky wrapper */
+  function getSpreadGap() {
+    const wrapper  = deck.closest('.features-sticky-wrapper');
+    const title    = wrapper ? wrapper.querySelector('h2') : null;
+    const wrapperH = wrapper ? wrapper.offsetHeight : window.innerHeight;
+    const titleH   = title   ? title.offsetHeight + 40 : 120;
+    const cardH    = cards[0] ? cards[0].offsetHeight : 150;
+    const available = wrapperH - titleH - 48; // 48px bottom breathing room
+    return Math.max(cardH + 10, Math.floor((available - cardH) / (count - 1)));
   }
 
-  // Animate based on scroll progress (0 = fully stacked, 1 = fully spread)
+  function render(progress) {
+    const spreadGap = getSpreadGap();
+    const cardH     = cards[0] ? cards[0].offsetHeight : 150;
+
+    cards.forEach((card, i) => {
+      const stackedY = i * PEEK;
+      const spreadY  = i * spreadGap;
+      card.style.transform = `translateY(${stackedY + (spreadY - stackedY) * progress}px)`;
+    });
+
+    // Grow deck container to prevent clipping
+    const stackedH = cardH + (count - 1) * PEEK;
+    const spreadH  = cardH + (count - 1) * spreadGap;
+    deck.style.height = (stackedH + (spreadH - stackedH) * progress) + 'px';
+  }
+
   function animate() {
-    const trackRect = track.getBoundingClientRect();
-    const trackH = track.offsetHeight;
-    const viewH = window.innerHeight;
-
-    // progress: 0 when track top hits viewport top, 1 when track bottom hits viewport bottom
-    const scrolled = -trackRect.top;
-    const scrollRange = trackH - viewH;
-    let progress = Math.max(0, Math.min(1, scrolled / scrollRange));
-
-    cards.forEach((card, i) => {
-      const stackedY = i * PEEK;
-      const spreadY = i * SPREAD_GAP;
-      const currentY = stackedY + (spreadY - stackedY) * progress;
-      card.style.transform = `translateY(${currentY}px)`;
-    });
-
-    // Update deck height so it doesn't clip
-    const spreadTotalH = CARD_HEIGHT + (count - 1) * SPREAD_GAP;
-    const stackedTotalH = CARD_HEIGHT + (count - 1) * PEEK;
-    const currentH = stackedTotalH + (spreadTotalH - stackedTotalH) * progress;
-    deck.style.height = currentH + 'px';
+    const scrolled = -track.getBoundingClientRect().top;
+    const range    = track.offsetHeight - window.innerHeight;
+    render(Math.max(0, Math.min(1, scrolled / range)));
   }
 
-  setStacked();
+  // Init stacked state immediately
+  cards.forEach((card, i) => {
+    card.style.transition = 'none';
+    card.style.transform  = `translateY(${i * PEEK}px)`;
+  });
+
   window.addEventListener('scroll', animate, { passive: true });
-  animate(); // run once on load
+  window.addEventListener('resize', animate, { passive: true });
+  window.addEventListener('load', animate);
+  setTimeout(animate, 120); // re-run after layout settles
 }
 
 /* ---------------- INIT ---------------- */

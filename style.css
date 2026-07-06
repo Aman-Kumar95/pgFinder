@@ -625,9 +625,9 @@ nav a:hover, nav .active-link {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 60px 8%;
-  overflow: hidden;
+  justify-content: flex-start;
+  padding: 60px 8% 40px;
+  overflow: visible;
 }
 
 .features-sticky-wrapper h2 {
@@ -644,7 +644,7 @@ nav a:hover, nav .active-link {
   position: relative;
   width: 100%;
   max-width: 850px;
-  height: 320px;
+  /* height is managed by JS */
 }
 
 /* INDIVIDUAL CARDS */
