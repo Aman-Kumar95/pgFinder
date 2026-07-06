@@ -210,82 +210,85 @@ function initCardTilt() {
   });
 }
 
-/* ---------------- FEATURES DECK ANIMATION (Intersection Observer) ---------------- */
+/* ---------------- FEATURES DECK SCROLL-DRIVEN ANIMATION ---------------- */
 function initFeaturesDeckAnimation() {
-  var deck = document.getElementById('featuresDeck');
-  if (!deck) return;
+  var section = document.getElementById('featuresSection');
+  var deck    = document.getElementById('featuresDeck');
+  if (!section || !deck) return;
 
   var cards = Array.from(deck.querySelectorAll('.feature-card'));
   if (!cards.length) return;
 
-  var PEEK = 32;       // px strip visible per stacked card
-  var initialized = false;
+  var PEEK = 28; // px peek per stacked card
 
   function getCardH() { return cards[0] ? cards[0].offsetHeight : 130; }
 
-  /* ---- STACK: collapse cards back into a pile ---- */
-  function stack(withTransition) {
-    var cardH = getCardH();
-    if (withTransition) {
-      // Add .collapsing for reversed stagger delays, keep .spread for transitions
-      deck.classList.add('spread', 'collapsing');
-      deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
-      for (var i = 0; i < cards.length; i++) {
-        cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
-      }
-      // After animation finishes, strip both classes so next spread starts clean
-      setTimeout(function() {
-        deck.classList.remove('spread', 'collapsing');
-      }, 1000);
-    } else {
-      deck.classList.remove('spread', 'collapsing');
-      deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
-      for (var i = 0; i < cards.length; i++) {
-        cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
-      }
-    }
-  }
+  /* Linear interpolation helper */
+  function lerp(a, b, t) { return a + (b - a) * t; }
 
-  /* ---- SPREAD: fan cards out ---- */
-  function spread() {
-    var cardH = getCardH();
-    var GAP   = cardH + 16;
-    deck.classList.add('spread');
-    deck.style.height = (cardH + (cards.length - 1) * GAP) + 'px';
+  /* Clamp progress 0..1 */
+  function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+  /* Set all card positions for a given progress (0 = stacked, 1 = spread) */
+  function render(progress) {
+    var cardH    = getCardH();
+    var GAP      = cardH + 18;           // spread: gap between card tops
+    var stackedH = cardH + (cards.length - 1) * PEEK;
+    var spreadH  = cardH + (cards.length - 1) * GAP;
+
+    /* Update deck container height to match */
+    deck.style.height = lerp(stackedH, spreadH, progress) + 'px';
+
+    /* Move each card — each card starts opening when its "slot" is reached */
     for (var i = 0; i < cards.length; i++) {
-      cards[i].style.transform = 'translateY(' + (i * GAP) + 'px)';
+      var stackedY = i * PEEK;
+      var spreadY  = i * GAP;
+
+      /* Stagger: card i opens after a small delay relative to scroll */
+      /* progress for card i runs from (i * 0.15) to (i * 0.15 + 0.7) */
+      var start = i * 0.18;
+      var end   = start + 0.64;
+      var t     = clamp01((progress - start) / (end - start));
+
+      cards[i].style.transform = 'translateY(' + lerp(stackedY, spreadY, t) + 'px)';
     }
   }
 
-  /* ---- INIT: set stacked state before any animation ---- */
+  /* Measure scroll progress through the section */
+  function getProgress() {
+    var rect      = section.getBoundingClientRect();
+    var scrolled  = -rect.top;                           // px scrolled into section
+    var total     = section.offsetHeight - window.innerHeight; // total scroll range
+    return total > 0 ? clamp01(scrolled / total) : 0;
+  }
+
+  /* Initial render */
   function init() {
-    if (!initialized) {
-      stack(false);
-      initialized = true;
-    }
+    var cardH    = getCardH();
+    var stackedH = cardH + (cards.length - 1) * PEEK;
+    deck.style.height = stackedH + 'px';
+    render(getProgress());
   }
 
   window.addEventListener('load', init);
   requestAnimationFrame(function() { requestAnimationFrame(init); });
 
-  /* ---- OBSERVER: spread on enter, stack on exit ---- */
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          // Entering viewport → spread with 200ms delay
-          setTimeout(spread, 200);
-        } else if (initialized) {
-          // Leaving viewport → pile back up smoothly
-          stack(true);
-        }
+  /* rAF-throttled scroll handler for butter-smooth updates */
+  var rafPending = false;
+  window.addEventListener('scroll', function() {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(function() {
+        render(getProgress());
+        rafPending = false;
       });
-    }, { threshold: 0.25 });
-    observer.observe(deck);
-  } else {
-    setTimeout(spread, 300);
-  }
+    }
+  }, { passive: true });
+
+  /* Also update on resize (card height may change) */
+  window.addEventListener('resize', init, { passive: true });
 }
+
 
 /* ---------------- HOME LISTINGS AUTO SCROLL ---------------- */
 function initListingsAutoScroll() {

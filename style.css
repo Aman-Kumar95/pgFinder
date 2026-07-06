@@ -607,14 +607,30 @@ nav a:hover, nav .active-link {
 }
 
 /* OTHER MODULES */
+/* ===== FEATURES SECTION — scroll-driven deck ===== */
 .features {
   background-color: #111217;
-  padding: 80px 8% 60px;
+  /* tall so scroll drives the animation; sticky content stays pinned */
+  height: 300vh;
 }
 
-.features h2 {
+/* sticky inner wrapper — stays pinned while scrolling through .features */
+.features-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 8%;
+  overflow: hidden;
+}
+
+.features-sticky h2 {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
+  flex-shrink: 0;
 }
 
 .reviews {
@@ -627,9 +643,7 @@ nav a:hover, nav .active-link {
   position: relative;
   width: 100%;
   max-width: 850px;
-  margin: 0 auto;
-  /* height is set by JS after measuring cards */
-  transition: height 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  /* height set by JS — no transition needed, JS sets it every scroll frame */
 }
 
 /* INDIVIDUAL CARDS - absolutely stacked at top */
@@ -643,6 +657,7 @@ nav a:hover, nav .active-link {
   border: 1px solid rgba(255,255,255,0.06);
   will-change: transform;
   overflow: hidden;
+  /* NO transition — scroll controls position directly for smooth real-time feel */
 }
 
 /* Staggered dark backgrounds */
@@ -651,21 +666,7 @@ nav a:hover, nav .active-link {
 .feature-card:nth-child(3) { background: #272c4a; z-index: 2; border-color: rgba(255,204,0,0.08); }
 .feature-card:nth-child(4) { background: #2e335a; z-index: 1; border-color: rgba(255,204,0,0.04); }
 
-/* Smooth spread transition triggered by JS adding .spread class */
-.features-deck.spread .feature-card {
-  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-}
-/* Spread: top card first → bottom card last */
-.features-deck.spread .feature-card:nth-child(1) { transition-delay: 0s; }
-.features-deck.spread .feature-card:nth-child(2) { transition-delay: 0.08s; }
-.features-deck.spread .feature-card:nth-child(3) { transition-delay: 0.16s; }
-.features-deck.spread .feature-card:nth-child(4) { transition-delay: 0.24s; }
 
-/* Collapse: bottom card first → top card last (natural pile feel) */
-.features-deck.spread.collapsing .feature-card:nth-child(1) { transition-delay: 0.24s; }
-.features-deck.spread.collapsing .feature-card:nth-child(2) { transition-delay: 0.16s; }
-.features-deck.spread.collapsing .feature-card:nth-child(3) { transition-delay: 0.08s; }
-.features-deck.spread.collapsing .feature-card:nth-child(4) { transition-delay: 0s; }
 
 
 .feature-label {
@@ -1168,12 +1169,18 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
   }
 
   .features {
-    padding: 60px 5% 40px;
+    /* Keep tall for scroll animation, but less than desktop */
+    height: 250vh;
   }
 
-  .features h2 {
-    font-size: 22px;
-    margin-bottom: 32px;
+  .features-sticky {
+    padding: 0 5%;
+    justify-content: center;
+  }
+
+  .features-sticky h2 {
+    font-size: 20px;
+    margin-bottom: 28px;
   }
 
   .features-deck {
@@ -1192,6 +1199,7 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
   .feature-card p {
     font-size: 13.5px;
   }
+
 
   .team-grid {
     gap: 12px;
