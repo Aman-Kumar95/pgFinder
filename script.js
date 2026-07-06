@@ -346,7 +346,7 @@ function initFeaturesDeckAnimation() {
 
   const cards = Array.from(deck.querySelectorAll('.feature-card'));
   const count = cards.length;
-  const PEEK  = 26; // px each card peeks when fully stacked
+  const PEEK  = 36; // px each card peeks when fully stacked
 
   /* Compute spread gap so ALL cards fit inside the sticky wrapper */
   function getSpreadGap() {

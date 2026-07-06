@@ -612,7 +612,7 @@ nav a:hover, nav .active-link {
 
 /* SCROLL TRACK - gives scroll distance for animation */
 .features-scroll-track {
-  height: 400vh;
+  height: 200vh;
   background-color: #111217;
   position: relative;
 }
@@ -662,10 +662,10 @@ nav a:hover, nav .active-link {
   overflow: hidden;
 }
 
-.feature-card:nth-child(1) { background: #14161d; z-index: 4; }
-.feature-card:nth-child(2) { background: #191c25; z-index: 3; }
-.feature-card:nth-child(3) { background: #1e222e; z-index: 2; }
-.feature-card:nth-child(4) { background: #242937; z-index: 1; }
+.feature-card:nth-child(1) { background: #1a1d28; z-index: 4; border-color: rgba(255,204,0,0.15); }
+.feature-card:nth-child(2) { background: #22273a; z-index: 3; border-color: rgba(255,204,0,0.10); }
+.feature-card:nth-child(3) { background: #2a3050; z-index: 2; border-color: rgba(255,204,0,0.07); }
+.feature-card:nth-child(4) { background: #313868; z-index: 1; border-color: rgba(255,204,0,0.04); }
 
 .feature-label {
   display: block;
@@ -1115,7 +1115,7 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
   }
 
   .features-scroll-track {
-    height: 350vh;
+    height: 180vh;
   }
 
   .features-sticky-wrapper {
