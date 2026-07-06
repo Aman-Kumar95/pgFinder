@@ -218,54 +218,72 @@ function initFeaturesDeckAnimation() {
   var cards = Array.from(deck.querySelectorAll('.feature-card'));
   if (!cards.length) return;
 
-  var PEEK = 32; // px strip visible per card when stacked
+  var PEEK = 32;       // px strip visible per stacked card
+  var initialized = false;
 
-  // Set deck height and card stacked positions immediately
-  function setupStacked() {
-    var cardH = cards[0].offsetHeight || 130;
-    // Deck height = one card + peek strips of remaining cards
-    deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
-    // Stack all cards with peek strips
-    for (var i = 0; i < cards.length; i++) {
-      cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
+  function getCardH() { return cards[0] ? cards[0].offsetHeight : 130; }
+
+  /* ---- STACK: collapse cards back into a pile ---- */
+  function stack(withTransition) {
+    var cardH = getCardH();
+    if (withTransition) {
+      // Add .collapsing for reversed stagger delays, keep .spread for transitions
+      deck.classList.add('spread', 'collapsing');
+      deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
+      }
+      // After animation finishes, strip both classes so next spread starts clean
+      setTimeout(function() {
+        deck.classList.remove('spread', 'collapsing');
+      }, 1000);
+    } else {
+      deck.classList.remove('spread', 'collapsing');
+      deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
+      }
     }
   }
 
-  // Spread cards to fill full deck height
-  function triggerSpread() {
-    var cardH = cards[0].offsetHeight || 130;
-    var GAP   = cardH + 16; // gap between spread cards
-    var totalH = cardH + (cards.length - 1) * GAP;
-
-    // Update deck height to fit all spread cards
-    deck.style.height = totalH + 'px';
-
-    // Add spread class to enable CSS transitions, then set positions
+  /* ---- SPREAD: fan cards out ---- */
+  function spread() {
+    var cardH = getCardH();
+    var GAP   = cardH + 16;
     deck.classList.add('spread');
+    deck.style.height = (cardH + (cards.length - 1) * GAP) + 'px';
     for (var i = 0; i < cards.length; i++) {
       cards[i].style.transform = 'translateY(' + (i * GAP) + 'px)';
     }
   }
 
-  // Run setup after fonts/layout settled
-  window.addEventListener('load', setupStacked);
-  requestAnimationFrame(function() { requestAnimationFrame(setupStacked); });
+  /* ---- INIT: set stacked state before any animation ---- */
+  function init() {
+    if (!initialized) {
+      stack(false);
+      initialized = true;
+    }
+  }
 
-  // Trigger spread when deck enters viewport
+  window.addEventListener('load', init);
+  requestAnimationFrame(function() { requestAnimationFrame(init); });
+
+  /* ---- OBSERVER: spread on enter, stack on exit ---- */
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
-          // Small delay so user sees the stacked state first
-          setTimeout(triggerSpread, 200);
-          observer.unobserve(deck);
+          // Entering viewport → spread with 200ms delay
+          setTimeout(spread, 200);
+        } else if (initialized) {
+          // Leaving viewport → pile back up smoothly
+          stack(true);
         }
       });
     }, { threshold: 0.25 });
     observer.observe(deck);
   } else {
-    // Fallback: spread immediately
-    setTimeout(triggerSpread, 300);
+    setTimeout(spread, 300);
   }
 }
 
