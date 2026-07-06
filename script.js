@@ -211,11 +211,8 @@ function initCardTilt() {
 }
 
 /* ---------------- HOME LISTINGS AUTO SCROLL ---------------- */
-
 function initListingsAutoScroll() {
   const container = document.getElementById('listingsContainer');
-
-  // Sirf home page par chalega
   if (!container) return;
 
   let isPaused = false;
@@ -224,36 +221,17 @@ function initListingsAutoScroll() {
   function autoScroll() {
     if (!isPaused) {
       container.scrollLeft += scrollSpeed;
-
-      // End par pahunchne par beginning se start
-      if (
-        container.scrollLeft + container.clientWidth >=
-        container.scrollWidth - 1
-      ) {
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 1) {
         container.scrollLeft = 0;
       }
     }
-
     requestAnimationFrame(autoScroll);
   }
 
-  // Mouse hover par pause
-  container.addEventListener('mouseenter', () => {
-    isPaused = true;
-  });
-
-  container.addEventListener('mouseleave', () => {
-    isPaused = false;
-  });
-
-  // Mobile touch par pause
-  container.addEventListener('touchstart', () => {
-    isPaused = true;
-  });
-
-  container.addEventListener('touchend', () => {
-    isPaused = false;
-  });
+  container.addEventListener('mouseenter', () => { isPaused = true; });
+  container.addEventListener('mouseleave', () => { isPaused = false; });
+  container.addEventListener('touchstart', () => { isPaused = true; });
+  container.addEventListener('touchend', () => { isPaused = false; });
 
   requestAnimationFrame(autoScroll);
 }
@@ -266,27 +244,22 @@ function initCustomDropdowns() {
     if (select.dataset.customized === 'true') return;
     select.dataset.customized = 'true';
     
-    // Hide native select
     select.style.display = 'none';
     
-    // Create container wrapper
     const wrapper = document.createElement('div');
     wrapper.className = 'custom-select';
     select.parentNode.insertBefore(wrapper, select);
-    wrapper.appendChild(select); // move select inside wrapper
+    wrapper.appendChild(select);
     
-    // Create trigger button
     const trigger = document.createElement('div');
     trigger.className = 'select-trigger';
     const selectedOption = select.options[select.selectedIndex];
     trigger.innerHTML = `<span>${selectedOption.textContent}</span><span class="chevron">&#9662;</span>`;
     wrapper.appendChild(trigger);
     
-    // Create options container
     const optionsContainer = document.createElement('div');
     optionsContainer.className = 'select-options';
     
-    // Populate options
     Array.from(select.options).forEach(opt => {
       const optionEl = document.createElement('div');
       optionEl.className = 'option';
@@ -296,19 +269,11 @@ function initCustomDropdowns() {
       
       optionEl.addEventListener('click', (e) => {
         e.stopPropagation();
-        
-        // Remove selected class from sibling options
         optionsContainer.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
         optionEl.classList.add('selected');
-        
-        // Update trigger text
         trigger.querySelector('span').textContent = opt.textContent;
-        
-        // Update hidden select and trigger change event
         select.value = opt.value;
         select.dispatchEvent(new Event('change'));
-        
-        // Close dropdown
         wrapper.classList.remove('open');
       });
       
@@ -317,20 +282,15 @@ function initCustomDropdowns() {
     
     wrapper.appendChild(optionsContainer);
     
-    // Toggle dropdown open state
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      
-      // Close all other dropdowns
       document.querySelectorAll('.custom-select.open').forEach(openSelect => {
         if (openSelect !== wrapper) openSelect.classList.remove('open');
       });
-      
       wrapper.classList.toggle('open');
     });
   });
   
-  // Close dropdowns when clicking outside
   document.addEventListener('click', () => {
     document.querySelectorAll('.custom-select.open').forEach(openSelect => {
       openSelect.classList.remove('open');
@@ -340,61 +300,52 @@ function initCustomDropdowns() {
 
 /* ---------------- FEATURES DECK SCROLL ANIMATION ---------------- */
 function initFeaturesDeckAnimation() {
-  const track = document.getElementById('featuresTrack');
-  const deck  = document.getElementById('featuresDeck');
+  var track = document.getElementById('featuresTrack');
+  var deck  = document.getElementById('featuresDeck');
   if (!track || !deck) return;
 
-  const cards = Array.from(deck.querySelectorAll('.feature-card'));
-  const count = cards.length;
-  const PEEK  = 36; // px each card peeks when fully stacked
+  var cards = Array.from(deck.querySelectorAll('.feature-card'));
+  var count = cards.length;
+  var PEEK  = 34; // px — strip visible per card when fully stacked
 
-  /* Compute spread gap so ALL cards fit inside the sticky wrapper */
-  function getSpreadGap() {
-    const wrapper  = deck.closest('.features-sticky-wrapper');
-    const title    = wrapper ? wrapper.querySelector('h2') : null;
-    const wrapperH = wrapper ? wrapper.offsetHeight : window.innerHeight;
-    const titleH   = title   ? title.offsetHeight + 40 : 120;
-    const cardH    = cards[0] ? cards[0].offsetHeight : 150;
-    const available = wrapperH - titleH - 48; // 48px bottom breathing room
-    return Math.max(cardH + 10, Math.floor((available - cardH) / (count - 1)));
+  function doRender(progress) {
+    // Use deck.offsetHeight as the total available height for spreading
+    var deckH    = deck.offsetHeight;
+    var cardH    = cards[0] ? cards[0].offsetHeight : 130;
+    // spreadGap fills deck exactly: card[count-1] bottom === deckH
+    var spreadGap = count > 1 ? (deckH - cardH) / (count - 1) : 0;
+
+    for (var i = 0; i < cards.length; i++) {
+      var fromY = i * PEEK;
+      var toY   = i * spreadGap;
+      var y     = fromY + (toY - fromY) * progress;
+      cards[i].style.transform = 'translateY(' + y + 'px)';
+    }
   }
 
-  function render(progress) {
-    const spreadGap = getSpreadGap();
-    const cardH     = cards[0] ? cards[0].offsetHeight : 150;
-
-    cards.forEach((card, i) => {
-      const stackedY = i * PEEK;
-      const spreadY  = i * spreadGap;
-      card.style.transform = `translateY(${stackedY + (spreadY - stackedY) * progress}px)`;
-    });
-
-    // Grow deck container to prevent clipping
-    const stackedH = cardH + (count - 1) * PEEK;
-    const spreadH  = cardH + (count - 1) * spreadGap;
-    deck.style.height = (stackedH + (spreadH - stackedH) * progress) + 'px';
+  function onScroll() {
+    var scrolled = -track.getBoundingClientRect().top;
+    var range    = track.offsetHeight - window.innerHeight;
+    var progress = range > 0 ? Math.max(0, Math.min(1, scrolled / range)) : 0;
+    doRender(progress);
   }
 
-  function animate() {
-    const scrolled = -track.getBoundingClientRect().top;
-    const range    = track.offsetHeight - window.innerHeight;
-    render(Math.max(0, Math.min(1, scrolled / range)));
+  // Set initial stacked state
+  for (var j = 0; j < cards.length; j++) {
+    cards[j].style.transition = 'none';
+    cards[j].style.transform  = 'translateY(' + (j * PEEK) + 'px)';
   }
 
-  // Init stacked state immediately
-  cards.forEach((card, i) => {
-    card.style.transition = 'none';
-    card.style.transform  = `translateY(${i * PEEK}px)`;
-  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function() { setTimeout(onScroll, 50); }, { passive: true });
 
-  window.addEventListener('scroll', animate, { passive: true });
-  window.addEventListener('resize', animate, { passive: true });
-  window.addEventListener('load', animate);
-  setTimeout(animate, 120); // re-run after layout settles
+  // Run after layout is fully painted so deck.offsetHeight is correct
+  window.addEventListener('load', onScroll);
+  requestAnimationFrame(function() { requestAnimationFrame(onScroll); });
 }
 
 /* ---------------- INIT ---------------- */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   initCustomDropdowns();
   applyHousingFilters();
   initScrollReveal();

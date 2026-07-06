@@ -622,29 +622,31 @@ nav a:hover, nav .active-link {
   position: sticky;
   top: 0;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 60px 8% 40px;
-  overflow: visible;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  padding: 60px 8% 50px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .features-sticky-wrapper h2 {
   font-size: 30px;
   font-weight: 800;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
   letter-spacing: -0.5px;
   text-align: center;
   width: 100%;
 }
 
-/* DECK CONTAINER */
+/* DECK CONTAINER - fills remaining height after title */
 .features-deck {
   position: relative;
   width: 100%;
   max-width: 850px;
-  /* height is managed by JS */
+  margin: 0 auto;
+  overflow: hidden;
+  /* height fills the 1fr grid row automatically */
 }
 
 /* INDIVIDUAL CARDS */
