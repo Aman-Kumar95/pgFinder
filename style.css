@@ -49,6 +49,12 @@ header.scrolled {
   color: #ffcc00;
 }
 
+.logo-img {
+  height: 52px;
+  width: auto;
+  display: block;
+}
+
 nav a {
   color: #94a3b8;
   text-decoration: none;
@@ -946,6 +952,9 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(13, 14, 18, 0.95);
     backdrop-filter: blur(10px);
+  }
+  .logo-img {
+    height: 42px !important;
   }
   nav {
     display: flex;
