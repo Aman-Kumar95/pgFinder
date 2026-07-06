@@ -942,6 +942,9 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
     flex-direction: column;
     gap: 15px;
     padding: 16px 5%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(13, 14, 18, 0.95);
+    backdrop-filter: blur(10px);
   }
   nav {
     display: flex;
@@ -979,6 +982,42 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
   .btn-main {
     padding: 12px 28px;
     font-size: 15px;
+  }
+  .hero-right {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  .how-it-works-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 24px 20px;
+    background: rgba(20, 22, 29, 0.65);
+    border: 1px solid rgba(255, 204, 0, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  }
+  .hiw-title {
+    font-size: 19px;
+    margin-bottom: 20px;
+  }
+  .step-item {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: center;
+    padding-bottom: 20px;
+  }
+  .step-text {
+    min-width: 0;
+    text-align: left;
+  }
+  .step-text h4 {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    font-weight: 600;
+    color: #e2e8f0;
   }
   
   /* Carousel Config for Mobile */
@@ -1164,43 +1203,15 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
 
 /* SMALL MOBILE FIX — Galaxy S8 etc. */
 @media (max-width: 400px) {
-
   .hero {
     padding-left: 4%;
     padding-right: 4%;
   }
-
-  .hero-right {
-    width: 100%;
-  }
-
   .how-it-works-card {
-    width: 100%;
-    padding: 24px 16px;
+    padding: 20px 14px;
   }
-
-  .hiw-title {
-    font-size: 20px;
-  }
-
-  .step-item {
-    display: grid;
-    grid-template-columns: 32px minmax(0, 1fr);
-    column-gap: 14px;
-    align-items: center;
-    padding-bottom: 24px;
-  }
-
-  .step-text {
-    min-width: 0;
-    text-align: left;
-  }
-
   .step-text h4 {
     font-size: 13px;
-    line-height: 1.35;
-    margin: 0;
-    overflow-wrap: break-word;
   }
 }
 
