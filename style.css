@@ -682,8 +682,76 @@ nav a:hover, nav .active-link {
 
 .reviews-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.review-box {
+  background: #1a1d28;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+}
+
+.review-box:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 204, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(255, 204, 0, 0.05);
+}
+
+.review-box::before {
+  content: "“";
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 80px;
+  font-family: Georgia, serif;
+  color: rgba(255, 204, 0, 0.08);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Golden star ratings inside each testimonial */
+.review-box::after {
+  content: "★★★★★";
+  display: block;
+  color: #ffcc00;
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.review-box p {
+  color: #e2e8f0;
+  font-size: 15px;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.review-box h4 {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.review-box h4::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #ffcc00;
+  border-radius: 50%;
 }
 
 /* STATS COUNTERS */
