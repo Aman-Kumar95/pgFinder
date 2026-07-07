@@ -1,57 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" width="100%" height="100%">
   <defs>
-    <!-- Cyan gradient for the owl and pixels -->
-    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f2fe" />
-      <stop offset="100%" stop-color="#4facfe" />
+    <!-- Warm gold gradient matching the premium theme -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe600" />
+      <stop offset="100%" stop-color="#ffb300" />
     </linearGradient>
   </defs>
 
-  <g transform="translate(10, 5)">
-    <!-- Pixels on the left near 'U' -->
-    <rect x="0" y="38" width="6" height="6" fill="#ffffff" opacity="0.9"/>
-    <rect x="6" y="48" width="6" height="6" fill="#00f2fe"/>
-    <rect x="12" y="32" width="6" height="6" fill="#ffffff" opacity="0.7"/>
+  <!-- Left pixel details in gold -->
+  <rect x="5" y="16" width="3" height="3" fill="#ffb300" opacity="0.8"/>
+  <rect x="9" y="21" width="3" height="3" fill="#ffffff" opacity="0.6"/>
 
-    <!-- Text: Un -->
-    <text x="18" y="80" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="62" fill="#ffffff" letter-spacing="-1px">Un</text>
+  <!-- Main Word: Unwize -->
+  <!-- 'Un' in high-contrast crisp white -->
+  <text x="14" y="36" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="28" fill="#ffffff" letter-spacing="-0.5px">Un</text>
 
-    <!-- Stylized Owl Icon (replacing 'w') -->
-    <g transform="translate(108, 20)">
-      <!-- Outer head outline -->
-      <path d="M15,22 L45,4 L75,22 L67,60 L45,82 L23,60 Z" fill="url(#cyanGrad)"/>
-      <!-- Inner face contrast -->
-      <path d="M18,24 L45,8 L72,24 L65,58 L45,78 L25,58 Z" fill="#111217"/>
-      <!-- Brows & Nose structure -->
-      <path d="M22,25 L45,46 L68,25 L58,32 L45,46 L32,32 Z" fill="url(#cyanGrad)"/>
-      <path d="M42,46 L48,46 L45,56 Z" fill="url(#cyanGrad)"/>
-      <!-- Glowing Eyes -->
-      <ellipse cx="33" cy="38" rx="8" ry="6" fill="#111217" stroke="url(#cyanGrad)" stroke-width="2.5"/>
-      <circle cx="33" cy="38" r="2.5" fill="url(#cyanGrad)"/>
-      <ellipse cx="57" cy="38" rx="8" ry="6" fill="#111217" stroke="url(#cyanGrad)" stroke-width="2.5"/>
-      <circle cx="57" cy="38" r="2.5" fill="url(#cyanGrad)"/>
-      
-      <!-- Pixels floating from owl -->
-      <rect x="74" y="-8" width="5" height="5" fill="#00f2fe"/>
-      <rect x="80" y="0" width="5" height="5" fill="#ffffff" opacity="0.8"/>
-      <rect x="70" y="8" width="5" height="5" fill="#00f2fe"/>
-    </g>
-
-    <!-- Text: ize -->
-    <text x="198" y="80" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="62" fill="#ffffff" letter-spacing="-1px">ize</text>
-
-    <!-- Text: Stays -->
-    <!-- Positioned underneath, elegant serif style -->
-    <text x="100" y="118" font-family="Georgia, Cambria, serif" font-weight="bold" font-size="34" fill="#ffffff" letter-spacing="1px">Stay</text>
-    <text x="184" y="118" font-family="Georgia, Cambria, serif" font-weight="bold" font-size="34" fill="#ffffff" letter-spacing="1px">s</text>
-
-    <!-- Minimal House Icon over 'ay' area of Stays -->
-    <path d="M166,104 L175,96 L184,104 L184,115 L166,115 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M171,115 L171,109 L179,109 L179,115" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <line x1="162" y1="105" x2="188" y2="105" stroke="#ffffff" stroke-width="1.5"/>
-
-    <!-- Micro pixels near Stays -->
-    <rect x="206" y="108" width="4" height="4" fill="#00f2fe"/>
-    <rect x="212" y="114" width="4" height="4" fill="#ffffff" opacity="0.6"/>
+  <!-- 'w' represented by a clean, modern geometric Owl Head with true transparency cutout -->
+  <g transform="translate(54, 11)">
+    <!-- Outer shape with inner face cut out (using fill-rule="evenodd" for 100% transparency) -->
+    <path fill-rule="evenodd" d="M2,9 L14,1 L26,9 L23,23 L14,30 L5,23 Z M4.5,10 L14,3.5 L23.5,10 L21,21.5 L14,27.5 L7,21.5 Z" fill="url(#goldGrad)"/>
+    
+    <!-- Eyebrows and beak -->
+    <path d="M7,10 L14,16.5 L21,10 L18,11.5 L14,16.5 L10,11.5 Z" fill="url(#goldGrad)"/>
+    <path d="M13,16.5 L15,16.5 L14,21 Z" fill="url(#goldGrad)"/>
+    
+    <!-- Large, expressive eyes -->
+    <circle cx="10" cy="13.5" r="3" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+    <circle cx="10" cy="13.5" r="1.2" fill="url(#goldGrad)"/>
+    <circle cx="18" cy="13.5" r="3" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+    <circle cx="18" cy="13.5" r="1.2" fill="url(#goldGrad)"/>
   </g>
+
+  <!-- 'ize' in high-contrast crisp white -->
+  <text x="85" y="36" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="28" fill="#ffffff" letter-spacing="-0.5px">ize</text>
+
+  <!-- Subtitle: STAYS -->
+  <g transform="translate(0, 3)">
+    <!-- Tiny gold house outline before STAYS -->
+    <path d="M48,46 L48,41 L52,38 L56,41 L56,46 Z" fill="none" stroke="url(#goldGrad)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M51,46 L51,43 L53,43 L53,46" fill="none" stroke="url(#goldGrad)" stroke-width="1"/>
+    
+    <!-- STAYS text aligned and tracked out -->
+    <text x="61" y="47" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="10.5" fill="#94a3b8" letter-spacing="4px">STAYS</text>
+  </g>
+
+  <!-- Right/top floating pixels -->
+  <rect x="134" y="12" width="3" height="3" fill="#ffb300"/>
+  <rect x="139" y="17" width="3" height="3" fill="#ffffff" opacity="0.7"/>
+  <rect x="131" y="21" width="3" height="3" fill="#ffb300" opacity="0.5"/>
 </svg>
