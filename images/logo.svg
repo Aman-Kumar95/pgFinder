@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 215 75" width="100%" height="100%">
-  <!-- Gold gradient matching the project theme -->
+  <!-- Original cyan/blue gradients for branding -->
   <defs>
-    <linearGradient id="goldTheme" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffe600" />
-      <stop offset="100%" stop-color="#ff9900" />
+    <linearGradient id="cyanTheme" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#00a2ff" />
     </linearGradient>
   </defs>
 
   <!-- Left pixel details (digital theme) -->
-  <g fill="url(#goldTheme)" opacity="0.9">
+  <g fill="url(#cyanTheme)" opacity="0.9">
     <rect x="3" y="25" width="3.5" height="3.5" />
     <rect x="7.5" y="30.5" width="3.5" height="3.5" fill="#ffffff" />
     <rect x="12" y="20.5" width="3.5" height="3.5" />
@@ -18,7 +18,7 @@
   <text x="18" y="46" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="38" fill="#ffffff" letter-spacing="-0.5px">Un</text>
 
   <!-- Beautiful smooth Owl Head Icon (replacing 'w') with true transparent cutouts -->
-  <!-- Scaled to fit perfectly between 'Un' and 'ize' -->
+  <!-- Using the original brand cyan/blue gradient -->
   <g transform="translate(70, 2) scale(0.66)">
     <!-- Main head outline with eye socket cutouts (using fill-rule="evenodd" for 100% transparent eyes) -->
     <!-- Incorporating the signature digital pillar/tower on the right horn -->
@@ -46,10 +46,10 @@
       M 66,28 
       A 10,10 0 1,0 66,48 
       A 10,10 0 1,0 66,28" 
-      fill="url(#goldTheme)" />
+      fill="url(#cyanTheme)" />
 
-    <!-- Angry Eyebrow curves (Gold) -->
-    <path d="M 12,20 Q 31,34 50,40 Q 69,34 88,20 L 88,27 Q 69,37 50,44 Q 31,37 12,27 Z" fill="url(#goldTheme)"/>
+    <!-- Angry Eyebrow curves (Cyan) -->
+    <path d="M 12,20 Q 31,34 50,40 Q 69,34 88,20 L 88,27 Q 69,37 50,44 Q 31,37 12,27 Z" fill="url(#cyanTheme)"/>
 
     <!-- Glowing eyes inside the sockets -->
     <!-- Left Eye (White outline with center pupil) -->
@@ -61,12 +61,12 @@
     <circle cx="66" cy="38" r="2" fill="#ffffff"/>
 
     <!-- Owl Beak (Diamond shape) -->
-    <polygon points="46,38 54,38 50,48" fill="url(#goldTheme)"/>
+    <polygon points="46,38 54,38 50,48" fill="url(#cyanTheme)"/>
 
     <!-- Digital pixels rising from the right horn tower -->
-    <rect x="94" y="-8" width="4" height="4" fill="url(#goldTheme)" />
+    <rect x="94" y="-8" width="4" height="4" fill="url(#cyanTheme)" />
     <rect x="100" y="0" width="4" height="4" fill="#ffffff" opacity="0.8" />
-    <rect x="91" y="6" width="4" height="4" fill="url(#goldTheme)" />
+    <rect x="91" y="6" width="4" height="4" fill="url(#cyanTheme)" />
   </g>
 
   <!-- Main text: "ize" -->
@@ -78,15 +78,15 @@
     <text x="2" y="22" font-family="Georgia, Cambria, 'Times New Roman', serif" font-weight="bold" font-size="22" fill="#ffffff">Stays</text>
     
     <!-- House icon integrated seamlessly over the letters 'a' and 'y' -->
-    <path d="M40,12 L47,5 L54,12 L54,22 L40,22 Z" fill="none" stroke="url(#goldTheme)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M44,22 L44,17 L50,17 L50,22" fill="none" stroke="url(#goldTheme)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M40,12 L47,5 L54,12 L54,22 L40,22 Z" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M44,22 L44,17 L50,17 L50,22" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     
     <!-- Pixels on the right of Stays -->
-    <rect x="62" y="13" width="2.5" height="2.5" fill="url(#goldTheme)" />
+    <rect x="62" y="13" width="2.5" height="2.5" fill="url(#cyanTheme)" />
     <rect x="67" y="19" width="2.5" height="2.5" fill="#ffffff" opacity="0.7" />
   </g>
 
   <!-- Right/top floating pixels -->
-  <rect x="194" y="24" width="3.5" height="3.5" fill="url(#goldTheme)"/>
+  <rect x="194" y="24" width="3.5" height="3.5" fill="url(#cyanTheme)"/>
   <rect x="199" y="30" width="3.5" height="3.5" fill="#ffffff" opacity="0.8"/>
 </svg>
