@@ -651,21 +651,10 @@ nav a:hover, nav .active-link {
 .feature-card:nth-child(3) { background: #272c4a; z-index: 2; border-color: rgba(255,204,0,0.08); }
 .feature-card:nth-child(4) { background: #2e335a; z-index: 1; border-color: rgba(255,204,0,0.04); }
 
-/* Smooth spread transition triggered by JS adding .spread class */
-.features-deck.spread .feature-card {
-  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+/* Scroll-driven: no CSS transitions — JS controls position per frame */
+.features-deck.scroll-driven .feature-card {
+  transition: none;
 }
-/* Spread: top card first → bottom card last */
-.features-deck.spread .feature-card:nth-child(1) { transition-delay: 0s; }
-.features-deck.spread .feature-card:nth-child(2) { transition-delay: 0.08s; }
-.features-deck.spread .feature-card:nth-child(3) { transition-delay: 0.16s; }
-.features-deck.spread .feature-card:nth-child(4) { transition-delay: 0.24s; }
-
-/* Collapse: bottom card first → top card last (natural pile feel) */
-.features-deck.spread.collapsing .feature-card:nth-child(1) { transition-delay: 0.24s; }
-.features-deck.spread.collapsing .feature-card:nth-child(2) { transition-delay: 0.16s; }
-.features-deck.spread.collapsing .feature-card:nth-child(3) { transition-delay: 0.08s; }
-.features-deck.spread.collapsing .feature-card:nth-child(4) { transition-delay: 0s; }
 
 
 .feature-label {

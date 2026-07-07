@@ -210,7 +210,7 @@ function initCardTilt() {
   });
 }
 
-/* ---------------- FEATURES DECK ANIMATION (Intersection Observer) ---------------- */
+/* ---------------- FEATURES DECK ANIMATION (Scroll-Position Driven) ---------------- */
 function initFeaturesDeckAnimation() {
   var deck = document.getElementById('featuresDeck');
   if (!deck) return;
@@ -218,73 +218,66 @@ function initFeaturesDeckAnimation() {
   var cards = Array.from(deck.querySelectorAll('.feature-card'));
   if (!cards.length) return;
 
-  var PEEK = 32;       // px strip visible per stacked card
-  var initialized = false;
+  var PEEK = 30;          // px visible strip when stacked
+  var scrollRAF = null;
+  var lastProgress = -1;
 
   function getCardH() { return cards[0] ? cards[0].offsetHeight : 130; }
 
-  /* ---- STACK: collapse cards back into a pile ---- */
-  function stack(withTransition) {
-    var cardH = getCardH();
-    if (withTransition) {
-      // Add .collapsing for reversed stagger delays, keep .spread for transitions
-      deck.classList.add('spread', 'collapsing');
-      deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
-      for (var i = 0; i < cards.length; i++) {
-        cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
-      }
-      // After animation finishes, strip both classes so next spread starts clean
-      setTimeout(function() {
-        deck.classList.remove('spread', 'collapsing');
-      }, 1000);
-    } else {
-      deck.classList.remove('spread', 'collapsing');
-      deck.style.height = (cardH + (cards.length - 1) * PEEK) + 'px';
-      for (var i = 0; i < cards.length; i++) {
-        cards[i].style.transform = 'translateY(' + (i * PEEK) + 'px)';
-      }
-    }
-  }
+  /* ---- Set deck container height based on progress (0=stacked, 1=spread) ---- */
+  function applyProgress(p) {
+    // Clamp
+    p = Math.max(0, Math.min(1, p));
+    if (Math.abs(p - lastProgress) < 0.002) return; // skip tiny updates
+    lastProgress = p;
 
-  /* ---- SPREAD: fan cards out ---- */
-  function spread() {
     var cardH = getCardH();
-    var GAP   = cardH + 16;
-    deck.classList.add('spread');
-    deck.style.height = (cardH + (cards.length - 1) * GAP) + 'px';
+    var GAP = cardH + 16;                    // spread gap
+    var stackedH = cardH + (cards.length - 1) * PEEK;
+    var spreadH  = cardH + (cards.length - 1) * GAP;
+
+    // Interpolate container height
+    deck.style.height = (stackedH + (spreadH - stackedH) * p) + 'px';
+
+    // Interpolate each card's translateY
     for (var i = 0; i < cards.length; i++) {
-      cards[i].style.transform = 'translateY(' + (i * GAP) + 'px)';
+      var stackedY = i * PEEK;
+      var spreadY  = i * GAP;
+      var y = stackedY + (spreadY - stackedY) * p;
+      cards[i].style.transform = 'translateY(' + y + 'px)';
     }
   }
 
-  /* ---- INIT: set stacked state before any animation ---- */
+  /* ---- Compute scroll progress for the section ---- */
+  function onScroll() {
+    if (scrollRAF) return;
+    scrollRAF = requestAnimationFrame(function() {
+      scrollRAF = null;
+      var rect = deck.getBoundingClientRect();
+      var vh = window.innerHeight;
+
+      // Start spreading when deck top enters bottom of viewport
+      // Fully spread when deck top reaches 30% from top of viewport
+      var startTrigger = vh;          // deck.top == vh → p=0
+      var endTrigger   = vh * 0.15;  // deck.top == 15vh → p=1
+
+      var progress = (startTrigger - rect.top) / (startTrigger - endTrigger);
+      applyProgress(progress);
+    });
+  }
+
+  /* ---- INIT ---- */
   function init() {
-    if (!initialized) {
-      stack(false);
-      initialized = true;
-    }
+    // Remove CSS transitions — scroll drives this directly
+    deck.classList.add('scroll-driven');
+    applyProgress(0);
+    onScroll(); // Compute initial state in case page loads mid-scroll
   }
 
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function() { lastProgress = -1; onScroll(); }, { passive: true });
   window.addEventListener('load', init);
   requestAnimationFrame(function() { requestAnimationFrame(init); });
-
-  /* ---- OBSERVER: spread on enter, stack on exit ---- */
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          // Entering viewport → spread with 200ms delay
-          setTimeout(spread, 200);
-        } else if (initialized) {
-          // Leaving viewport → pile back up smoothly
-          stack(true);
-        }
-      });
-    }, { threshold: 0.25 });
-    observer.observe(deck);
-  } else {
-    setTimeout(spread, 300);
-  }
 }
 
 /* ---------------- HOME LISTINGS AUTO SCROLL ---------------- */
