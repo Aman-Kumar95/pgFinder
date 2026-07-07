@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="100%">
+  <defs>
+    <!-- Cyan gradient for the owl and pixels -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#4facfe" />
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(10, 5)">
+    <!-- Pixels on the left near 'U' -->
+    <rect x="0" y="38" width="6" height="6" fill="#ffffff" opacity="0.9"/>
+    <rect x="6" y="48" width="6" height="6" fill="#00f2fe"/>
+    <rect x="12" y="32" width="6" height="6" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Text: Un -->
+    <text x="18" y="80" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="62" fill="#ffffff" letter-spacing="-1px">Un</text>
+
+    <!-- Stylized Owl Icon (replacing 'w') -->
+    <g transform="translate(108, 20)">
+      <!-- Outer head outline -->
+      <path d="M15,22 L45,4 L75,22 L67,60 L45,82 L23,60 Z" fill="url(#cyanGrad)"/>
+      <!-- Inner face contrast -->
+      <path d="M18,24 L45,8 L72,24 L65,58 L45,78 L25,58 Z" fill="#111217"/>
+      <!-- Brows & Nose structure -->
+      <path d="M22,25 L45,46 L68,25 L58,32 L45,46 L32,32 Z" fill="url(#cyanGrad)"/>
+      <path d="M42,46 L48,46 L45,56 Z" fill="url(#cyanGrad)"/>
+      <!-- Glowing Eyes -->
+      <ellipse cx="33" cy="38" rx="8" ry="6" fill="#111217" stroke="url(#cyanGrad)" stroke-width="2.5"/>
+      <circle cx="33" cy="38" r="2.5" fill="url(#cyanGrad)"/>
+      <ellipse cx="57" cy="38" rx="8" ry="6" fill="#111217" stroke="url(#cyanGrad)" stroke-width="2.5"/>
+      <circle cx="57" cy="38" r="2.5" fill="url(#cyanGrad)"/>
+      
+      <!-- Pixels floating from owl -->
+      <rect x="74" y="-8" width="5" height="5" fill="#00f2fe"/>
+      <rect x="80" y="0" width="5" height="5" fill="#ffffff" opacity="0.8"/>
+      <rect x="70" y="8" width="5" height="5" fill="#00f2fe"/>
+    </g>
+
+    <!-- Text: ize -->
+    <text x="198" y="80" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="62" fill="#ffffff" letter-spacing="-1px">ize</text>
+
+    <!-- Text: Stays -->
+    <!-- Positioned underneath, elegant serif style -->
+    <text x="100" y="118" font-family="Georgia, Cambria, serif" font-weight="bold" font-size="34" fill="#ffffff" letter-spacing="1px">Stay</text>
+    <text x="184" y="118" font-family="Georgia, Cambria, serif" font-weight="bold" font-size="34" fill="#ffffff" letter-spacing="1px">s</text>
+
+    <!-- Minimal House Icon over 'ay' area of Stays -->
+    <path d="M166,104 L175,96 L184,104 L184,115 L166,115 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M171,115 L171,109 L179,109 L179,115" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="162" y1="105" x2="188" y2="105" stroke="#ffffff" stroke-width="1.5"/>
+
+    <!-- Micro pixels near Stays -->
+    <rect x="206" y="108" width="4" height="4" fill="#00f2fe"/>
+    <rect x="212" y="114" width="4" height="4" fill="#ffffff" opacity="0.6"/>
+  </g>
+</svg>
