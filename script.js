@@ -328,7 +328,7 @@ function initListingsAutoScroll() {
     container.dataset.listenersAdded = 'true';
   }
 
-  const scrollSpeed = 1.2; // px per frame — smooth and visible
+  const scrollSpeed = 2.2; // px per frame — faster and livelier
   let currentScroll = container.scrollLeft;
 
   function autoScroll() {
