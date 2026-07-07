@@ -689,10 +689,10 @@ nav a:hover, nav .active-link {
 }
 
 .review-box {
-  background: #1a1d28;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #1e2230;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 32px;
+  padding: 24px;
   position: relative;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
@@ -701,57 +701,88 @@ nav a:hover, nav .active-link {
 .review-box:hover {
   transform: translateY(-5px);
   border-color: rgba(255, 204, 0, 0.3);
-  box-shadow: 0 10px 30px rgba(255, 204, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .review-box::before {
   content: "“";
   position: absolute;
-  top: 15px;
+  bottom: 10px;
   right: 25px;
-  font-size: 80px;
+  font-size: 90px;
   font-family: Georgia, serif;
-  color: rgba(255, 204, 0, 0.08);
+  color: rgba(255, 204, 0, 0.05);
   line-height: 1;
   pointer-events: none;
 }
 
-/* Golden star ratings inside each testimonial */
-.review-box::after {
-  content: "★★★★★";
-  display: block;
-  color: #ffcc00;
-  font-size: 16px;
-  letter-spacing: 2px;
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   margin-bottom: 16px;
 }
 
-.review-box p {
-  color: #e2e8f0;
-  font-size: 15px;
-  line-height: 1.6;
-  font-style: italic;
-  margin-bottom: 20px;
-}
-
-.review-box h4 {
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0;
+  justify-content: center;
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 16px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-.review-box h4::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background-color: #ffcc00;
-  border-radius: 50%;
+.gradient-gold {
+  background: linear-gradient(135deg, #ffe600, #ff9900);
+}
+
+.gradient-cyan {
+  background: linear-gradient(135deg, #00f2fe, #00a2ff);
+}
+
+.user-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+}
+
+.user-info-row h4 {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.user-status {
+  color: #8a99ad;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.stars {
+  color: #ffcc00;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.review-text {
+  color: #cbd5e1;
+  font-size: 14.5px;
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.text-gold {
+  color: #ffcc00;
 }
 
 /* STATS COUNTERS */
