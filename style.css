@@ -1139,7 +1139,7 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
   #listingsContainer {
     display: flex !important;
     gap: 16px;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: none;
     -webkit-overflow-scrolling: touch;
     margin-left: -8% !important;
     margin-right: -8% !important;

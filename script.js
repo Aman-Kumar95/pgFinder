@@ -328,16 +328,21 @@ function initListingsAutoScroll() {
     container.dataset.listenersAdded = 'true';
   }
 
-  const scrollSpeed = 0.8; // px per frame
+  const scrollSpeed = 1.2; // px per frame — smooth and visible
+  let currentScroll = container.scrollLeft;
 
   function autoScroll() {
     const halfWidth = container.scrollWidth / 2;
     if (halfWidth > 0 && !container.isPaused && !container.userScrolling) {
-      container.scrollLeft += scrollSpeed;
+      currentScroll += scrollSpeed;
       // Reset seamlessly when fanned past original width
-      if (container.scrollLeft >= halfWidth) {
-        container.scrollLeft -= halfWidth;
+      if (currentScroll >= halfWidth) {
+        currentScroll -= halfWidth;
       }
+      container.scrollLeft = currentScroll;
+    } else {
+      // Sync internal tracker with user's manual scroll position
+      currentScroll = container.scrollLeft;
     }
     window.listingsAutoScrollRaf = requestAnimationFrame(autoScroll);
   }
