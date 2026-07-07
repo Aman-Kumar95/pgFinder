@@ -73,6 +73,9 @@ function renderListings(listings) {
 
   requestAnimationFrame(() => {
     initScrollReveal();
+    if (isHomePage()) {
+      initListingsAutoScroll();
+    }
   });
 }
 
@@ -285,56 +288,62 @@ function initListingsAutoScroll() {
   const container = document.getElementById('listingsContainer');
   if (!container) return;
 
-  // Wait for cards to be rendered by the filter/render logic
-  function tryInit() {
-    const cards = container.querySelectorAll('.house-card');
-    if (!cards.length) {
-      setTimeout(tryInit, 200);
-      return;
-    }
-
-    // Clone all cards and append for seamless infinite loop
-    const originals = Array.from(cards);
-    originals.forEach(card => {
-      const clone = card.cloneNode(true);
-      clone.setAttribute('aria-hidden', 'true');
-      container.appendChild(clone);
-    });
-
-    let isPaused = false;
-    let userScrolling = false;
-    let userScrollTimeout = null;
-    const scrollSpeed = 0.8; // px per frame — smooth and readable
-    const halfWidth = container.scrollWidth / 2;
-
-    function autoScroll() {
-      if (!isPaused && !userScrolling) {
-        container.scrollLeft += scrollSpeed;
-        // When we've scrolled through all originals, reset seamlessly
-        if (container.scrollLeft >= halfWidth) {
-          container.scrollLeft -= halfWidth;
-        }
-      }
-      requestAnimationFrame(autoScroll);
-    }
-
-    // Pause on hover / touch
-    container.addEventListener('mouseenter', () => { isPaused = true; });
-    container.addEventListener('mouseleave', () => { isPaused = false; });
-    container.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
-    container.addEventListener('touchend', () => { isPaused = false; }, { passive: true });
-
-    // Pause briefly on manual scroll then resume
-    container.addEventListener('scroll', () => {
-      userScrolling = true;
-      clearTimeout(userScrollTimeout);
-      userScrollTimeout = setTimeout(() => { userScrolling = false; }, 1500);
-    }, { passive: true });
-
-    requestAnimationFrame(autoScroll);
+  // Cancel any existing animation frame loop
+  if (window.listingsAutoScrollRaf) {
+    cancelAnimationFrame(window.listingsAutoScrollRaf);
+    window.listingsAutoScrollRaf = null;
   }
 
-  tryInit();
+  // Get the original cards (ignore clones)
+  const cards = Array.from(container.querySelectorAll('.house-card:not([aria-hidden="true"])'));
+  if (!cards.length) return;
+
+  // Remove any previously appended clones to start fresh
+  container.querySelectorAll('.house-card[aria-hidden="true"]').forEach(clone => clone.remove());
+
+  // Clone all cards and append for seamless infinite loop
+  cards.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    container.appendChild(clone);
+  });
+
+  // Initialize persistent states on container
+  if (container.isPaused === undefined) container.isPaused = false;
+  if (container.userScrolling === undefined) container.userScrolling = false;
+
+  // Attach event listeners only once
+  if (container.dataset.listenersAdded !== 'true') {
+    container.addEventListener('mouseenter', () => { container.isPaused = true; });
+    container.addEventListener('mouseleave', () => { container.isPaused = false; });
+    container.addEventListener('touchstart', () => { container.isPaused = true; }, { passive: true });
+    container.addEventListener('touchend', () => { container.isPaused = false; }, { passive: true });
+
+    container.addEventListener('scroll', () => {
+      container.userScrolling = true;
+      clearTimeout(container.userScrollTimeout);
+      container.userScrollTimeout = setTimeout(() => { container.userScrolling = false; }, 1500);
+    }, { passive: true });
+
+    container.dataset.listenersAdded = 'true';
+  }
+
+  const scrollSpeed = 0.8; // px per frame
+
+  function autoScroll() {
+    const halfWidth = container.scrollWidth / 2;
+    if (halfWidth > 0 && !container.isPaused && !container.userScrolling) {
+      container.scrollLeft += scrollSpeed;
+      // Reset seamlessly when fanned past original width
+      if (container.scrollLeft >= halfWidth) {
+        container.scrollLeft -= halfWidth;
+      }
+    }
+    window.listingsAutoScrollRaf = requestAnimationFrame(autoScroll);
+  }
+
+  // Start the animation loop
+  window.listingsAutoScrollRaf = requestAnimationFrame(autoScroll);
 }
 
 /* ---------------- DYNAMIC CUSTOM SELECT DROPDOWNS ---------------- */
