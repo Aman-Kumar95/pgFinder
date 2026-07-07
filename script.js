@@ -60,8 +60,6 @@ function renderListings(listings) {
   const container = getActiveContainer();
   if (!container) return;
 
-  if (!isHomePage()) updateResultsCount(listings.length);
-
   if (listings.length === 0) {
     container.innerHTML = `<p style="color:#94a3b8; width: 100%; text-align:center; padding: 40px 0;">
       No PGs or flats match your filters right now. Try adjusting your search.
@@ -69,13 +67,17 @@ function renderListings(listings) {
     return;
   }
 
-  container.innerHTML = listings.map(buildCardHTML).join('');
+  if (!isHomePage()) {
+    updateResultsCount(listings.length);
+    container.innerHTML = listings.map(buildCardHTML).join('');
+  } else {
+    // Generate original + duplicate cards for CSS marquee loop
+    const cardsHTML = listings.map(buildCardHTML).join('');
+    container.innerHTML = `<div class="listings-track">${cardsHTML}${cardsHTML}</div>`;
+  }
 
   requestAnimationFrame(() => {
     initScrollReveal();
-    if (isHomePage()) {
-      initListingsAutoScroll();
-    }
   });
 }
 
@@ -283,73 +285,6 @@ function initFeaturesDeckAnimation() {
   requestAnimationFrame(function() { requestAnimationFrame(init); });
 }
 
-/* ---------------- HOME LISTINGS AUTO SCROLL ---------------- */
-function initListingsAutoScroll() {
-  const container = document.getElementById('listingsContainer');
-  if (!container) return;
-
-  // Cancel any existing animation frame loop
-  if (window.listingsAutoScrollRaf) {
-    cancelAnimationFrame(window.listingsAutoScrollRaf);
-    window.listingsAutoScrollRaf = null;
-  }
-
-  // Get the original cards (ignore clones)
-  const cards = Array.from(container.querySelectorAll('.house-card:not([aria-hidden="true"])'));
-  if (!cards.length) return;
-
-  // Remove any previously appended clones to start fresh
-  container.querySelectorAll('.house-card[aria-hidden="true"]').forEach(clone => clone.remove());
-
-  // Clone all cards and append for seamless infinite loop
-  cards.forEach(card => {
-    const clone = card.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');
-    container.appendChild(clone);
-  });
-
-  // Initialize persistent states on container
-  if (container.isPaused === undefined) container.isPaused = false;
-  if (container.userScrolling === undefined) container.userScrolling = false;
-
-  // Attach event listeners only once
-  if (container.dataset.listenersAdded !== 'true') {
-    container.addEventListener('mouseenter', () => { container.isPaused = true; });
-    container.addEventListener('mouseleave', () => { container.isPaused = false; });
-    container.addEventListener('touchstart', () => { container.isPaused = true; }, { passive: true });
-    container.addEventListener('touchend', () => { container.isPaused = false; }, { passive: true });
-
-    container.addEventListener('scroll', () => {
-      container.userScrolling = true;
-      clearTimeout(container.userScrollTimeout);
-      container.userScrollTimeout = setTimeout(() => { container.userScrolling = false; }, 1500);
-    }, { passive: true });
-
-    container.dataset.listenersAdded = 'true';
-  }
-
-  const scrollSpeed = 2.2; // px per frame — faster and livelier
-  let currentScroll = container.scrollLeft;
-
-  function autoScroll() {
-    const halfWidth = container.scrollWidth / 2;
-    if (halfWidth > 0 && !container.isPaused && !container.userScrolling) {
-      currentScroll += scrollSpeed;
-      // Reset seamlessly when fanned past original width
-      if (currentScroll >= halfWidth) {
-        currentScroll -= halfWidth;
-      }
-      container.scrollLeft = currentScroll;
-    } else {
-      // Sync internal tracker with user's manual scroll position
-      currentScroll = container.scrollLeft;
-    }
-    window.listingsAutoScrollRaf = requestAnimationFrame(autoScroll);
-  }
-
-  // Start the animation loop
-  window.listingsAutoScrollRaf = requestAnimationFrame(autoScroll);
-}
 
 /* ---------------- DYNAMIC CUSTOM SELECT DROPDOWNS ---------------- */
 function initCustomDropdowns() {
@@ -423,5 +358,4 @@ document.addEventListener('DOMContentLoaded', function() {
   initCounters();
   initCardTilt();
   initFeaturesDeckAnimation();
-  initListingsAutoScroll();
 });
