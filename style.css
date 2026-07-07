@@ -216,7 +216,10 @@ nav a:hover, nav .active-link {
   background: linear-gradient(to bottom, rgba(255, 204, 0, 0.6), rgba(255, 204, 0, 0.05));
   transform: scaleY(0);
   transform-origin: top;
-  animation: lineGrow 1.2s ease 1.3s forwards;
+}
+
+.how-it-works-card.visible .steps-list::before {
+  animation: lineGrow 1.2s ease 1.0s forwards;
 }
 
 @keyframes lineGrow {
@@ -231,13 +234,17 @@ nav a:hover, nav .active-link {
   padding-bottom: 24px;
   z-index: 1;
   opacity: 0;
+}
+
+.how-it-works-card.visible .step-item {
   animation: stepSlideIn 0.6s ease both;
 }
+
 .step-item:last-child { padding-bottom: 0; }
-.step-item:nth-child(1) { animation-delay: 0.5s; }
-.step-item:nth-child(2) { animation-delay: 0.75s; }
-.step-item:nth-child(3) { animation-delay: 1s; }
-.step-item:nth-child(4) { animation-delay: 1.25s; }
+.how-it-works-card.visible .step-item:nth-child(1) { animation-delay: 0.2s; }
+.how-it-works-card.visible .step-item:nth-child(2) { animation-delay: 0.45s; }
+.how-it-works-card.visible .step-item:nth-child(3) { animation-delay: 0.7s; }
+.how-it-works-card.visible .step-item:nth-child(4) { animation-delay: 0.95s; }
 
 @keyframes stepSlideIn {
   from { opacity: 0; transform: translateX(24px); }
