@@ -285,25 +285,56 @@ function initListingsAutoScroll() {
   const container = document.getElementById('listingsContainer');
   if (!container) return;
 
-  let isPaused = false;
-  const scrollSpeed = 1;
-
-  function autoScroll() {
-    if (!isPaused) {
-      container.scrollLeft += scrollSpeed;
-      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 1) {
-        container.scrollLeft = 0;
-      }
+  // Wait for cards to be rendered by the filter/render logic
+  function tryInit() {
+    const cards = container.querySelectorAll('.house-card');
+    if (!cards.length) {
+      setTimeout(tryInit, 200);
+      return;
     }
+
+    // Clone all cards and append for seamless infinite loop
+    const originals = Array.from(cards);
+    originals.forEach(card => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      container.appendChild(clone);
+    });
+
+    let isPaused = false;
+    let userScrolling = false;
+    let userScrollTimeout = null;
+    const scrollSpeed = 0.8; // px per frame — smooth and readable
+    const halfWidth = container.scrollWidth / 2;
+
+    function autoScroll() {
+      if (!isPaused && !userScrolling) {
+        container.scrollLeft += scrollSpeed;
+        // When we've scrolled through all originals, reset seamlessly
+        if (container.scrollLeft >= halfWidth) {
+          container.scrollLeft -= halfWidth;
+        }
+      }
+      requestAnimationFrame(autoScroll);
+    }
+
+    // Pause on hover / touch
+    container.addEventListener('mouseenter', () => { isPaused = true; });
+    container.addEventListener('mouseleave', () => { isPaused = false; });
+    container.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
+    container.addEventListener('touchend', () => { isPaused = false; }, { passive: true });
+
+    // Pause briefly on manual scroll then resume
+    container.addEventListener('scroll', () => {
+      userScrolling = true;
+      clearTimeout(userScrollTimeout);
+      userScrollTimeout = setTimeout(() => { userScrolling = false; }, 1500);
+    }, { passive: true });
+
     requestAnimationFrame(autoScroll);
   }
 
-  container.addEventListener('mouseenter', () => { isPaused = true; });
-  container.addEventListener('mouseleave', () => { isPaused = false; });
-  container.addEventListener('touchstart', () => { isPaused = true; });
-  container.addEventListener('touchend', () => { isPaused = false; });
-
-  requestAnimationFrame(autoScroll);
+  tryInit();
 }
 
 /* ---------------- DYNAMIC CUSTOM SELECT DROPDOWNS ---------------- */
@@ -378,5 +409,5 @@ document.addEventListener('DOMContentLoaded', function() {
   initCounters();
   initCardTilt();
   initFeaturesDeckAnimation();
-  // Auto-scroll disabled — conflicts with scroll-snap
+  initListingsAutoScroll();
 });
