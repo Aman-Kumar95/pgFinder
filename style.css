@@ -50,7 +50,7 @@ header.scrolled {
 }
 
 .logo-img {
-  height: 48px;
+  height: 56px;
   width: auto;
   display: block;
 }
@@ -963,7 +963,7 @@ footer h3 { color: #ffcc00; margin-bottom: 15px; font-size: 18px; }
     backdrop-filter: blur(10px);
   }
   .logo-img {
-    height: 38px !important;
+    height: 46px !important;
   }
   nav {
     display: flex;
