@@ -24,7 +24,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 8%;
+  padding: 15px 8%;
   background-color: #14161d;
   border-bottom: 1px solid #222530;
   position: sticky;
@@ -50,7 +50,7 @@ header.scrolled {
 }
 
 .logo-img {
-  height: 86px;
+  height: 78px;
   width: auto;
   display: block;
 }
